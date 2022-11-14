@@ -1,6 +1,8 @@
 import { combineReducers, configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { setupListeners } from "@reduxjs/toolkit/dist/query";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { getName } from "./asyncThunks";
+import { pokemonApi } from "./RTKQuery";
 
 
 export interface LoaderState {
@@ -51,12 +53,11 @@ const slice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(getName.pending, (state) => {
             state.status.getName = 'loading'
-        }).
-            addCase(getName.fulfilled, (state, action) => {
-                state.status.getName = 'idle'
-                state.name = action.payload.name;
-            }).
-            addCase(getName.rejected, (state) => {
+        }).addCase(getName.fulfilled, (state, action) => {
+            state.status.getName = 'idle'
+            state.name = action.payload.name;
+        })
+            .addCase(getName.rejected, (state) => {
                 state.status.getName = 'failed'
             });
     }
@@ -72,14 +73,17 @@ const slice2 = createSlice({
     }
 })
 export const reducers = combineReducers({
+    [pokemonApi.reducerPath]: pokemonApi.reducer,
     slice: slice.reducer,
     slice2: slice2.reducer
 })
 export const store = configureStore({
-    reducer: reducers
+    reducer: reducers,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(pokemonApi.middleware),
 })
 
 
+setupListeners(store.dispatch)
 // export const actions = { slice1: slice.actions, slice2: slice2.actions };
 // export type RootState = ReturnType<typeof store.getState>
 // export type AppDispatch = typeof store.dispatch
@@ -91,6 +95,6 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 
-export const actions = { slice1: slice.actions, slice2: slice2.actions}
-export const useAppDispatch = () =>  useDispatch<AppDispatch>()
-export const useAppSelector : TypedUseSelectorHook<RootState> = useSelector;
+export const actions = { slice1: slice.actions, slice2: slice2.actions }
+export const useAppDispatch = () => useDispatch<AppDispatch>()
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

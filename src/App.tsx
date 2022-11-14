@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import logo from './logo.svg'
 import './App.css'
-import { useAppDispatch, useAppSelector } from './app/hooks'
-import { actions } from './app/store'
+import { useAppDispatch, useAppSelector } from './app/store'
+import { actions, RootState } from './app/store'
 import { getName } from './app/store/asyncThunks'
+import FirstPage from './app/pages/FirstPage'
 
 function App() {
   const dispatch = useAppDispatch()
-  const name = useAppSelector((state)=> state.slice.name)
-  const age = useAppSelector((state)=> state.slice2.age)
+  const name = useAppSelector((state: RootState)=> state.slice.name)
+  const age = useAppSelector((state: RootState)=> state.slice2.age)
+  useEffect(()=>{
+    // console.log("App Rendered")
+  })
+  {console.log('App Rendered')}
   return (
     <div>
       <h1>App Component</h1>
@@ -25,6 +30,7 @@ function App() {
       <h1>Name: {name}</h1>
       <br/>
       <h1>Age: {age}</h1>
+      <FirstPage/>
     </div>
   )
 }
