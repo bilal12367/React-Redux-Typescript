@@ -10,7 +10,18 @@ export const pokemonApi = createApi({
                 return `products`
             }
         }),
+        addNewPost: builder.mutation({
+            query: (payload) => ({
+              url: '/posts/add',
+              method: 'POST',
+              body: payload,
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+              },
+            }),
+          }),
     }), 
+    
 })
 
-export const { useGetAllProductsQuery } = pokemonApi
+export const { useGetAllProductsQuery, useAddNewPostMutation } = pokemonApi
