@@ -14,8 +14,8 @@ const FirstPage = () => {
   })
   const postReq = () => {
     addNewPost({
-      title: 'Some Title',
-      userId:5
+      name:"Shaik Mohammed Bilal",
+      age: 22
     }).unwrap().then((res)=>{
       console.log('res',res);
     })
@@ -27,8 +27,9 @@ const FirstPage = () => {
       {data1.isLoading && <h1>Loading ...</h1>}
       {data1.data && (
         <h1>
-          {Object.values(data1.data.products).map((item: any) => {
-            return <div key={item.id}>{item.title}</div>
+          {Object.values(data1.data.data).map((item: any) => {
+            console.log("item",item)
+            return <div key={item.id}>{item.first_name}  {item.last_name}</div>
           })}
         </h1>
       )}
